@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken'
 import { IResponse } from '../interfaces/responseInterface.js'
 
 interface jwtPayload{
-    id:string;
-    role:string;
+    userId:string;
 }
 
 
@@ -19,12 +18,9 @@ const isAuth = async(req:Request,res:Response,next:NextFunction)=>{
             throw new Error("jwt Secret not define")
         }
         const verifyToken = jwt.verify(token,process.env.JWT_SECRET) as jwtPayload
-        req.id = verifyToken.id
-        req.role=verifyToken.role
+        req.userId = verifyToken.userId
         next()
     } catch (error:any) {
-        console.log("auth error",error.message);
-        
         res.status(401).json({success:true,message:"Invalid or expire token"}as IResponse)
     }
 }
