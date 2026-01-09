@@ -1,4 +1,5 @@
 import { Types, Schema, model } from "mongoose";
+import {genSlug} from '../utils/index.js'
 import IBlog from "../interfaces/blogModelInterface.js";
 
 const blogSchema = new Schema<IBlog>({
@@ -62,5 +63,11 @@ const blogSchema = new Schema<IBlog>({
 },{timestamps:{
     createdAt:"publishedAt"
 }});
+
+blogSchema.pre('validate',function(){
+  if(this.title && !this.slug){
+    this.slug = genSlug(this.title)
+  }
+})
 
 export default model<IBlog>('Blog',blogSchema)

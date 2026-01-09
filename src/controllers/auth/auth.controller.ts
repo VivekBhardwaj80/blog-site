@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import validator from "validator";
 import { IResponse } from "../../interfaces/responseInterface.js";
 import IUser from "../../interfaces/userModelInterface.js";
-import genUsername from "../../utils/index.js";
+import {genUsername} from "../../utils/index.js";
 import User from "../../models/user.model.js";
 import generateToken from "../../lib/generateToken.js";
 
@@ -107,7 +107,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
         } as IResponse);
       return;
     }
-    const comparePassword = bcrypt.compare(password, findUser.password);
+    const comparePassword = await bcrypt.compare(password, findUser.password);
     if (!comparePassword) {
       res
         .status(400)
